@@ -1,0 +1,14 @@
+<h1><%= @provider_id %></h1>
+<ul>
+    <% @employees.each do |e| %>
+        <li>
+            <%# <a href="/employees/<%= employee['id'] %>
+                <%# <%= "#{employee['first_name']} #{employee['last_name']}" %> 
+             <%# </a>  %>
+            <%= link_to "#{e['first_name']} #{e['last_name']}", "/employees/#{e['id']}?provider_id=#{@provider_id}" %>
+        </li>
+    <% end %>
+
+</ul>
+
+<%= link_to "Providers List", providers_path %>

@@ -1,0 +1,12 @@
+<h1>Providers</h1>
+<p>Available Providers</p>
+
+<ul>
+    <% @providers.each do |provider| %>
+        <li>
+            <a href="/providers/<%= provider[:id] %>">
+                <%= provider[:name] %>
+            </a>
+        </li>
+    <% end %>
+</ul>
