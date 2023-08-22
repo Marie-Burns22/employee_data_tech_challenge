@@ -1,4 +1,6 @@
 class ProvidersController < ApplicationController
+  DIRECTORY_URL = 'https://sandbox.tryfinch.com/api/employer/directory'
+  COMPANY_DATA_URL = 'https://sandbox.tryfinch.com/api/employer/company'
 
   def index
     @providers = [
@@ -10,6 +12,7 @@ class ProvidersController < ApplicationController
   def show
     @provider_id = params[:id]
     @employees = directory
+    @company = company_data
   end
 
   private 
@@ -39,8 +42,24 @@ class ProvidersController < ApplicationController
   end
 
   def directory
-    url = 'https://sandbox.tryfinch.com/api/employer/directory'
-    headers = { 
+    response = HTTParty.get(DIRECTORY_URL, headers: headers_with_token)
+
+    if response.success?
+      return response.parsed_response['individuals']
+    else
+      return "Directory not available for #{params[:id].titleize}. Error message: #{response.response.msg}"
+    end
+  end
+
+  def company_data
+    response = HTTParty.get(COMPANY_DATA_URL, headers: headers_with_token)
+
+    if response.success?
+      response.parsed_response
+    else
+      return "Company information not available for #{params[:id].titleize}. Error message: #{response.response.msg}"
+    end
+  end
       "Authorization" => "Bearer #{token}",
       "Content-Type" => "application/json",
     }
