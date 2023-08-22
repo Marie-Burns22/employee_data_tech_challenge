@@ -1,35 +1,43 @@
 class EmployeesController < ApplicationController
+
+  CREATE_URL = 'https://sandbox.tryfinch.com/api/sandbox/create'
+  EMPLOYMENT_DATA_URL = 'https://sandbox.tryfinch.com/api/employer/employment'
+  INDIVIDUAL_DATA_URL = 'https://sandbox.tryfinch.com/api/employer/individual'
+
   def show
     @employee_id = params[:id]
-    @individual_data = individual_data.parsed_response["responses"].first["body"]
-    @employment_data = employment_data.parsed_response["responses"].first["body"]
+    @provider_id = params[:provider_id]
+    @individual_data = individual_data
+    @employment_data = employment_data
   end
 
   private
 
-  def individual_data 
-    url = 'https://sandbox.tryfinch.com/api/employer/individual'
-   
-    HTTParty.post(url, body: data.to_json, headers: headers)
+  def individual_data    
+    response = HTTParty.post(INDIVIDUAL_DATA_URL, body: request_body.to_json, headers: headers_with_token)
+    
+    if response.success?
+      return response.parsed_response["responses"].first["body"]
+    else
+      return "Individual Data Not Available for #{params[:provider_id].titleize}. Error message: #{response.response.msg}"
+    end
   end
 
   def employment_data 
-    url = 'https://sandbox.tryfinch.com/api/employer/employment'
-   
-    HTTParty.post(url, body: data.to_json, headers: headers)
+    response = HTTParty.post(EMPLOYMENT_DATA_URL, body: request_body.to_json, headers: headers_with_token)
+
+    if response.success?
+      return response.parsed_response["responses"].first["body"]
+    else
+      return "Employment Data Not Available for #{params[:provider_id].titleize}. Error message: #{response.response.msg}"
+    end
   end
 
-  def data
-    {
-      requests: [
-          {
-              individual_id: "#{params[:id]}"
-          }
-      ]
-    }
+  def request_body
+    { requests: [{ individual_id: "#{params[:id]}" }] }
   end
 
-  def headers
+  def headers_with_token
     { 
       "Authorization" => "Bearer #{token}",
       "Content-Type" => 'application/json',
@@ -45,10 +53,9 @@ class EmployeesController < ApplicationController
   end
 
   def new_token
-    url = 'https://sandbox.tryfinch.com/api/sandbox/create'
     headers = { 'Content-Type' => 'application/json' }
 
-    response = HTTParty.post(url, body: provider_params.to_json, headers: headers)
+    response = HTTParty.post(CREATE_URL, body: provider_params.to_json, headers: headers)
     response["access_token"]
   end
 
