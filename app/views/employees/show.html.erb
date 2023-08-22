@@ -1,46 +1,66 @@
 <h1>Employee Data</h1>
 
 <h3>Individual Data </h3>
-<ul>
-    <% @individual_data.each do |k, v| %>
-         <% if v.is_a?(Hash) %>
-            <li><p>
-                <strong><%=k.capitalize %>: </strong>
-                <ul>
-                    <% v.each do |key, value|%>
-                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
-                    <% end %>
-                </ul>
-            </p></li> 
-        <% elsif v.is_a?(Array) && v.any? %>
-            <li><p>
-                <strong><%=k.capitalize %>: </strong>
-                <ul>
-                    <% v.first.each do |key, value|%>
-                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
-                    <% end %>
-                </ul>
-            </p></li> 
-        <% else %>
-            <li><p><strong><%= k.capitalize %>: </strong><%= v || "N/A" %></p></li>
+<% if @individual_data.is_a?(String) %>
+    <h4><%= @individual_data %> </h4>
+<% else %>
+    <ul>
+        <% @individual_data.each do |k, v| %>
+            <% if v.is_a?(Hash) %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.each do |key, value| %>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% elsif v.is_a?(Array) && v.any? %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.first.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% else %>
+                <li><strong><%= k.titleize %>: </strong><%= v || "N/A" %></li>
+            <% end %>
         <% end %>
-    <% end %>
-</ul>
+    </ul>
+<% end %>
 
 <h3>Employment Data</h3>
-<ul>
-    <% @employment_data.each do |k, v| %>
-        <% if v.is_a?(Hash) %>
-            <li><p>
-                <strong><%=k.capitalize %>: </strong>
-                <ul>
-                    <% v.each do |key, value|%>
-                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
-                    <% end %>
-                </ul>
-            </p></li> 
-        <% else %>
-            <li><p><strong><%= k.capitalize %>: </strong><%= v || "N/A" %></p></li>
+<% if @employment_data.is_a?(String) %>
+    <h4><%= @employment_data %> </h4>
+<% else %>
+    <ul>
+        <% @employment_data.each do |k, v| %>
+            <% if v.is_a?(Hash) %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% elsif v.is_a?(Array) && v.any? %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.first.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% else %>
+                <li><strong><%= k.titleize %>: </strong><%= v || "N/A" %></li>
+            <% end %>
         <% end %>
-    <% end %>
-</ul>
+    </ul>
+<% end %>
+
+<p><%= link_to "Directory for #{@provider_id.titleize}", "/providers/#{@provider_id}" %></p>
+<p><%= link_to "Providers List", providers_path %></p>
