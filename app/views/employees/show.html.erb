@@ -1,13 +1,37 @@
-<h1>Employees#show</h1>
+<h1>Employee Data</h1>
 
 <h3>Individual Data </h3>
 <ul>
     <% @individual_data.each do |k, v| %>
-        <li>
-            <p>
-                <strong><%= k %></strong>
-                <%= v %>
-            </p>
-        </li>
+         <% if v.is_a?(Hash) %>
+            <li><p>
+                <strong><%=k.capitalize %>: </strong>
+                <ul>
+                    <% v.each do |key, value|%>
+                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
+                    <% end %>
+                </ul>
+            </p></li> 
+        <% else %>
+            <li><p><strong><%= k.capitalize %>: </strong><%= v || "N/A" %></p></li>
+        <% end %>
+    <% end %>
+</ul>
+
+<h3>Employment Data</h3>
+<ul>
+    <% @employment_data.each do |k, v| %>
+        <% if v.is_a?(Hash) %>
+            <li><p>
+                <strong><%=k.capitalize %>: </strong>
+                <ul>
+                    <% v.each do |key, value|%>
+                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
+                    <% end %>
+                </ul>
+            </p></li> 
+        <% else %>
+            <li><p><strong><%= k.capitalize %>: </strong><%= v || "N/A" %></p></li>
+        <% end %>
     <% end %>
 </ul>

@@ -2,17 +2,20 @@ class EmployeesController < ApplicationController
   def show
     @employee_id = params[:id]
     @individual_data = individual_data.parsed_response["responses"].first["body"]
+    @employment_data = employment_data.parsed_response["responses"].first["body"]
   end
 
   private
 
   def individual_data 
     url = 'https://sandbox.tryfinch.com/api/employer/individual'
-    headers = { 
-      "Authorization" => "Bearer #{token}",
-      "Content-Type" => 'application/json',
-    }
-      
+   
+    HTTParty.post(url, body: data.to_json, headers: headers)
+  end
+
+  def employment_data 
+    url = 'https://sandbox.tryfinch.com/api/employer/employment'
+   
     HTTParty.post(url, body: data.to_json, headers: headers)
   end
 
@@ -23,6 +26,13 @@ class EmployeesController < ApplicationController
               individual_id: "#{params[:id]}"
           }
       ]
+    }
+  end
+
+  def headers
+    { 
+      "Authorization" => "Bearer #{token}",
+      "Content-Type" => 'application/json',
     }
   end
 
