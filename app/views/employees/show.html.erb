@@ -1,3 +1,66 @@
-<h1>Employees#show</h1>
-<p><%= @employee_id %></p>
-<p><%= @individual_data %></p>
+<h1>Employee Data</h1>
+
+<h3>Individual Data </h3>
+<% if @individual_data.is_a?(String) %>
+    <h4><%= @individual_data %> </h4>
+<% else %>
+    <ul>
+        <% @individual_data.each do |k, v| %>
+            <% if v.is_a?(Hash) %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.each do |key, value| %>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% elsif v.is_a?(Array) && v.any? %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.first.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% else %>
+                <li><strong><%= k.titleize %>: </strong><%= v || "N/A" %></li>
+            <% end %>
+        <% end %>
+    </ul>
+<% end %>
+
+<h3>Employment Data</h3>
+<% if @employment_data.is_a?(String) %>
+    <h4><%= @employment_data %> </h4>
+<% else %>
+    <ul>
+        <% @employment_data.each do |k, v| %>
+            <% if v.is_a?(Hash) %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% elsif v.is_a?(Array) && v.any? %>
+                <li>
+                    <strong><%=k.titleize %>: </strong>
+                    <ul>
+                        <% v.first.each do |key, value|%>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li> 
+            <% else %>
+                <li><strong><%= k.titleize %>: </strong><%= v || "N/A" %></li>
+            <% end %>
+        <% end %>
+    </ul>
+<% end %>
+
+<p><%= link_to "Directory for #{@provider_id.titleize}", "/providers/#{@provider_id}" %></p>
+<p><%= link_to "Providers List", providers_path %></p>

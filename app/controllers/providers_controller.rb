@@ -1,15 +1,46 @@
 class ProvidersController < ApplicationController
-
+  CREATE_URL = 'https://sandbox.tryfinch.com/api/sandbox/create'
+  DIRECTORY_URL = 'https://sandbox.tryfinch.com/api/employer/directory'
+  COMPANY_DATA_URL = 'https://sandbox.tryfinch.com/api/employer/company'
+  
   def index
     @providers = [
       { name: "ADP Run", id: 'adp_run' },
-      { name: "Gusto", id: 'gusto' }
+      { name: "Bamboo HR", id: 'bamboo_hr' },
+      { name: "Bamboo HR (API)", id: 'bamboo_hr_api' },
+      { name: "HiBob", id: 'bob' },
+      { name: "Gusto", id: 'gusto' },
+      { name: "Humaans", id: 'humaans' },
+      { name: "Insperity", id: 'insperity' },
+      { name: "Justworks", id: 'justworks' },
+      { name: "Namely", id: 'namely' },
+      { name: "Paychex Flex", id: 'paychex_flex' },
+      { name: "Paychex Flex (API)", id: 'paychex_flex_api' },
+      { name: "Paycom", id: 'paycom' },
+      { name: "Paycom (API)", id: 'paycom_api' },
+      { name: "Paylocity", id: 'paylocity' },
+      { name: "Paylocity (API)", id: 'paylocity_api' },
+      { name: "Personio", id: 'personio' },
+      { name: "Quickbooks", id: 'quickbooks' },
+      { name: "Rippling", id: 'rippling' },
+      { name: "Sage HR", id: 'sage_hr' },
+      { name: "Sapling", id: 'sapling' },
+      { name: "Squoia One", id: 'sequoia_one' },
+      { name: "Square Payroll", id: 'square_payroll' },
+      { name: "Trinet", id: 'trinet' },
+      { name: "Trinet (API)", id: 'trinet_api' },
+      { name: "Ulti Pro", id: 'ulti_pro' },
+      { name: "Wave", id: 'wave' },
+      { name: "Workday", id: 'workday' },
+      { name: "Zenefits", id: 'zenefits' },
+      { name: "Zenefits (API)", id: 'zenefits_api' }
     ]
   end
 
   def show
     @provider_id = params[:id]
     @employees = directory
+    @company = company_data
   end
 
   private 
@@ -23,10 +54,8 @@ class ProvidersController < ApplicationController
   end
 
   def new_token
-    url = 'https://sandbox.tryfinch.com/api/sandbox/create'
     headers = { 'Content-Type' => 'application/json' }
-
-    response = HTTParty.post(url, body: provider_params.to_json, headers: headers)
+    response = HTTParty.post(CREATE_URL, body: provider_params.to_json, headers: headers)
     response["access_token"]
   end
 
@@ -39,13 +68,29 @@ class ProvidersController < ApplicationController
   end
 
   def directory
-    url = 'https://sandbox.tryfinch.com/api/employer/directory'
-    headers = { 
+    response = HTTParty.get(DIRECTORY_URL, headers: headers_with_token)
+
+    if response.success?
+      return response.parsed_response['individuals']
+    else
+      return "Directory not available for #{params[:id].titleize}. Error message: #{response.response.msg}"
+    end
+  end
+
+  def company_data
+    response = HTTParty.get(COMPANY_DATA_URL, headers: headers_with_token)
+
+    if response.success?
+      response.parsed_response
+    else
+      return "Company information not available for #{params[:id].titleize}. Error message: #{response.response.msg}"
+    end
+  end
+
+  def headers_with_token
+    { 
       "Authorization" => "Bearer #{token}",
       "Content-Type" => "application/json",
     }
-
-    response = HTTParty.get(url, headers: headers)
-    response.parsed_response['individuals']
   end
 end

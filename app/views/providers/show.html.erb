@@ -1,10 +1,40 @@
-<h1><%= @provider_id %></h1>
+<h1><%= @provider_id.titleize %></h1>
+
+<h3> Company Information </h3>
+
+<% if @company.is_a?(String) %>
+    <h4><%= @company %></h4>
+<% else %>
+    <ul>
+        <% @company.each do |k, v| %>
+            <% if v.is_a?(Hash) %>
+                <li>
+                    <strong><%= k.titleize %>: </strong>
+                    <ul>
+                        <% v.each do |key, value| %>
+                            <li><strong><%= key.titleize %>: </strong><%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% elsif v.is_a?(Array) && v.any? %>
+                <li><strong><%= k.titleize %>: </strong>
+                    <ul>
+                        <% v.first.each do |key, value| %>
+                            <li><strong><%= key.titleize %>: </strong> <%= value || "N/A" %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% else %>
+                <li><p><strong><%= k.titleize %>: </strong><%= v || "N/A" %></p></li>
+            <% end %>
+        <% end %>
+    </ul>
+<% end %>
+
+<h3>Directory</h3>
 <ul>
     <% @employees.each do |e| %>
         <li>
-            <%# <a href="/employees/<%= employee['id'] %>
-                <%# <%= "#{employee['first_name']} #{employee['last_name']}" %> 
-             <%# </a>  %>
             <%= link_to "#{e['first_name']} #{e['last_name']}", "/employees/#{e['id']}?provider_id=#{@provider_id}" %>
         </li>
     <% end %>
