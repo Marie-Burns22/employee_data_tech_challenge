@@ -12,6 +12,15 @@
                     <% end %>
                 </ul>
             </p></li> 
+        <% elsif v.is_a?(Array) && v.any? %>
+            <li><p>
+                <strong><%=k.capitalize %>: </strong>
+                <ul>
+                    <% v.first.each do |key, value|%>
+                        <li><p><strong><%= key.capitalize %>: </strong><%= value || "N/A" %></p></li>
+                    <% end %>
+                </ul>
+            </p></li> 
         <% else %>
             <li><p><strong><%= k.capitalize %>: </strong><%= v || "N/A" %></p></li>
         <% end %>
