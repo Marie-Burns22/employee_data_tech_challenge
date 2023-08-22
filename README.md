@@ -19,6 +19,7 @@ Access token caching:
   The access token is stored using [Rails low level caching](https://guides.rubyonrails.org/caching_with_rails.html#low-level-caching).
 
 ### Local deployment
+  * After cloning to your local machine, run `bundle install` in the root directory of the application to install dependencies.
   * From a terminal, in the app directory, run `bin/rails server`.
   * You should see output in the terminal that includes `Listening on http://[::1]:3000`
   * In a browser window, navigate to localhost:3000.
