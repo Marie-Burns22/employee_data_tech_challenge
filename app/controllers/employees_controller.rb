@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
   def show
     @employee_id = params[:id]
-    @individual_data = individual_data
+    @individual_data = individual_data.parsed_response["responses"].first["body"]
   end
 
   private
@@ -13,8 +13,7 @@ class EmployeesController < ApplicationController
       "Content-Type" => 'application/json',
     }
       
-    response = HTTParty.post(url, body: data.to_json, headers: headers)
-    response
+    HTTParty.post(url, body: data.to_json, headers: headers)
   end
 
   def data

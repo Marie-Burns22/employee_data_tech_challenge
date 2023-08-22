@@ -1,3 +1,13 @@
 <h1>Employees#show</h1>
-<p><%= @employee_id %></p>
-<p><%= @individual_data %></p>
+
+<h3>Individual Data </h3>
+<ul>
+    <% @individual_data.each do |k, v| %>
+        <li>
+            <p>
+                <strong><%= k %></strong>
+                <%= v %>
+            </p>
+        </li>
+    <% end %>
+</ul>
